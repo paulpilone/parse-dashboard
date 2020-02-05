@@ -9,6 +9,7 @@ var fs = require('fs');
 const currentVersionFeatures = require('../package.json').parseDashboardFeatures;
 
 var newFeaturesInLatestVersion = [];
+
 packageJson('parse-dashboard', 'latest').then(latestPackage => {
   if (latestPackage.parseDashboardFeatures instanceof Array) {
     newFeaturesInLatestVersion = latestPackage.parseDashboardFeatures.filter(feature => {
@@ -59,7 +60,7 @@ module.exports = function(config, options) {
 
   // wait for app to mount in order to get mountpath
   app.on('mount', function() {
-    const mountPath = getMount(app.mountpath);
+    const mountPath = getMount(process.env.API_DASHBOARD_PATH || app.mountpath);
     const users = config.users;
     const useEncryptedPasswords = config.useEncryptedPasswords ? true : false;
     const authInstance = new Authentication(users, useEncryptedPasswords, mountPath);
